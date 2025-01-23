@@ -44,25 +44,32 @@ Toda la funcionalidad se maneja desde la clase `DNI`.
 import es.atgti.datavinci.dni.DNI;
 
 // Crear una instancia de DNI
-DNI miDNI = DNI.of("23000000T");
-System.out.println("Original: " + miDNI.getSource());
-System.out.println("DNI: " + miDNI.getNumber());
-System.out.println("Letra: " + miDNI.getControlDigit());
-System.out.println("Estado: " + miDNI.getValidationInfo());
-System.out.println("Puntuación: " + miDNI.getScore());
-System.out.println("Válido: " + miDNI.getValidationInfo().isValid());
-
-// Formatear un DNI
-Optional<String> dniFormateado = miDNI.format();
-
-DNIFormat dniFormat = DNIFormat.builder()
-    .dots(true)
-    .upperCase(true)
-    .zerosPadding(true)
-    .separator("-")
-    .build();
-
-Optional<String> otroDniFormateado = miDNI.format(dniFormat);
+class Test{
+    public static void main(String[] args){
+        DNI miDNI = DNI.of("23000000T");
+        System.out.println("Original: " + miDNI.getSource());
+        System.out.println("DNI: " + miDNI.getNumber());
+        System.out.println("Letra: " + miDNI.getControlDigit());
+        System.out.println("Estado: " + miDNI.getValidationInfo());
+        System.out.println("Puntuación: " + miDNI.getScore());
+        System.out.println("Válido: " + miDNI.isValid());
+        
+        // Formatear un DNI
+        Optional<String> dniFormateado = miDNI.format();
+        
+        DNIFormat dniFormat = DNIFormat.builder()
+            .dots(true)
+            .upperCase(true)
+            .zerosPadding(true)
+            .separator("-")
+            .build();
+        
+        Optional<String> otroDniFormateado = miDNI.format(dniFormat);
+        
+        System.out.println("DNI formateado: " + dniFormateado.orElse("No se pudo formatear"));
+        System.out.println("Otro DNI formateado: " + otroDniFormateado.orElse("No se pudo formatear"));
+    }
+}
 ```
 
 ### Posibles resultados de validación 
@@ -93,4 +100,4 @@ El proyecto tiene la siguiente estructura de directorios y archivos:
 
 ### Autor
 
-- [Iván Osuna Ayuste](ivan.osuna.ayuste@gmail.com)
+- [Iván Osuna Ayuste](mailto:ivan.osuna.ayuste@gmail.com)

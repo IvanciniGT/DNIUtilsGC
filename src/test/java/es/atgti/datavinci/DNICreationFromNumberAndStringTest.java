@@ -1,9 +1,10 @@
 package es.atgti.datavinci;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class DNICreationFromNumberAndStringTest {
 
@@ -16,14 +17,15 @@ class DNICreationFromNumberAndStringTest {
     })
     void noPoderCrearUnObjetoDNIDesdeUnNumeroIncorrectoTest(int numero, String letra){
         DNI miDNI = DNI.of(numero, letra);
-        Assertions.assertNotNull(miDNI);
-        Assertions.assertEquals(numero+letra, miDNI.getSource());
-        Assertions.assertTrue(miDNI.getNumber().isPresent());
-        Assertions.assertEquals(numero, miDNI.getNumber().get());
-        Assertions.assertTrue(miDNI.getControlDigit().isPresent());
-        Assertions.assertEquals("T", miDNI.getControlDigit().get());
-        Assertions.assertEquals(DNIValidationInfo.NOK_INVALID_DNI_NUMBER, miDNI.getValidationInfo());
-        Assertions.assertEquals(DNIValidationInfo.NOK_INVALID_DNI_NUMBER.getScore(), miDNI.getScore());
+        assertNotNull(miDNI);
+        assertEquals(numero+letra, miDNI.getSource());
+        assertTrue(miDNI.getNumber().isPresent());
+        assertEquals(numero, miDNI.getNumber().get());
+        assertTrue(miDNI.getControlDigit().isPresent());
+        assertEquals("T", miDNI.getControlDigit().get());
+        assertEquals(DNIValidationInfo.NOK_INVALID_DNI_NUMBER, miDNI.getValidationInfo());
+        assertEquals(DNIValidationInfo.NOK_INVALID_DNI_NUMBER.getScore(), miDNI.getScore());
+        assertFalse(miDNI.isValid());
     }
 
     @ParameterizedTest
@@ -37,14 +39,14 @@ class DNICreationFromNumberAndStringTest {
     void noPoderCrearUnObjetoDNIDesdeUnaCadenaDeTextoConLetraIncorrectaTest(int numero, String letra){
         String texto = numero+letra;
         DNI miDNI = DNI.of(numero, letra);
-        Assertions.assertNotNull(miDNI);
-        Assertions.assertEquals(texto, miDNI.getSource());
-        Assertions.assertTrue(miDNI.getNumber().isPresent());
-        Assertions.assertEquals(numero, miDNI.getNumber().get());
-        Assertions.assertTrue(miDNI.getControlDigit().isPresent());
-        Assertions.assertEquals(letra, miDNI.getControlDigit().get());
-        Assertions.assertEquals(DNIValidationInfo.NOK_INVALID_CONTROL_DIGIT, miDNI.getValidationInfo());
-        Assertions.assertEquals(DNIValidationInfo.NOK_INVALID_CONTROL_DIGIT.getScore(), miDNI.getScore());
+        assertNotNull(miDNI);
+        assertEquals(texto, miDNI.getSource());
+        assertTrue(miDNI.getNumber().isPresent());
+        assertEquals(numero, miDNI.getNumber().get());
+        assertTrue(miDNI.getControlDigit().isPresent());
+        assertEquals(letra, miDNI.getControlDigit().get());
+        assertEquals(DNIValidationInfo.NOK_INVALID_CONTROL_DIGIT, miDNI.getValidationInfo());
+        assertEquals(DNIValidationInfo.NOK_INVALID_CONTROL_DIGIT.getScore(), miDNI.getScore());
     }
     @ParameterizedTest
     @DisplayName("Debería poder crear un objeto DNI desde un numero")
@@ -56,14 +58,15 @@ class DNICreationFromNumberAndStringTest {
     })
     void okDNIsFromNumberTest(int numero){
         DNI miDNI = DNI.of(numero);
-        Assertions.assertNotNull(miDNI);
-        Assertions.assertEquals(""+numero, miDNI.getSource());
-        Assertions.assertTrue(miDNI.getNumber().isPresent());
-        Assertions.assertEquals(numero, miDNI.getNumber().get());
-        Assertions.assertTrue(miDNI.getControlDigit().isPresent());
-        Assertions.assertEquals("T", miDNI.getControlDigit().get());
-        Assertions.assertEquals(DNIValidationInfo.OK_NO_DIGIT_CONTROL, miDNI.getValidationInfo());
-        Assertions.assertEquals(DNIValidationInfo.OK_NO_DIGIT_CONTROL.getScore(), miDNI.getScore());
+        assertNotNull(miDNI);
+        assertEquals(""+numero, miDNI.getSource());
+        assertTrue(miDNI.getNumber().isPresent());
+        assertEquals(numero, miDNI.getNumber().get());
+        assertTrue(miDNI.getControlDigit().isPresent());
+        assertEquals("T", miDNI.getControlDigit().get());
+        assertEquals(DNIValidationInfo.OK_NO_DIGIT_CONTROL, miDNI.getValidationInfo());
+        assertEquals(DNIValidationInfo.OK_NO_DIGIT_CONTROL.getScore(), miDNI.getScore());
+        assertFalse(miDNI.isValid());
     }
 
     @ParameterizedTest
@@ -76,15 +79,15 @@ class DNICreationFromNumberAndStringTest {
     })
     void okDNIsFromNumberAndStringTest(int numero, String letra){
         String texto = numero+letra;
-        DNI miDNI = DNI.of(numero, letra);
-        Assertions.assertNotNull(miDNI);
-        Assertions.assertEquals(texto, miDNI.getSource());
-        Assertions.assertTrue(miDNI.getNumber().isPresent());
-        Assertions.assertEquals(numero, miDNI.getNumber().get());
-        Assertions.assertTrue(miDNI.getControlDigit().isPresent());
-        Assertions.assertEquals(letra.toUpperCase(), miDNI.getControlDigit().get());
-        Assertions.assertEquals(DNIValidationInfo.OK, miDNI.getValidationInfo());
-        Assertions.assertEquals(DNIValidationInfo.OK.getScore(), miDNI.getScore());
+        DNI miDNI = DNI.of(numero, letra.charAt(0));
+        assertNotNull(miDNI);
+        assertEquals(texto, miDNI.getSource());
+        assertTrue(miDNI.getNumber().isPresent());
+        assertEquals(numero, miDNI.getNumber().get());
+        assertTrue(miDNI.getControlDigit().isPresent());
+        assertEquals(letra.toUpperCase(), miDNI.getControlDigit().get());
+        assertEquals(DNIValidationInfo.OK, miDNI.getValidationInfo());
+        assertEquals(DNIValidationInfo.OK.getScore(), miDNI.getScore());
     }
 
     @ParameterizedTest
@@ -98,9 +101,9 @@ class DNICreationFromNumberAndStringTest {
     void noPoderCrearUnObjetoDNIDesdeUnaCadenaDeTextoConLetraIncorrectaTest(int numero, char letra){
         String texto = ""+numero+letra;
         DNI miDNI = DNI.of(texto);
-        Assertions.assertNotNull(miDNI);
-        Assertions.assertEquals(DNIValidationInfo.NOK_INVALID_CONTROL_DIGIT, miDNI.getValidationInfo());
-        Assertions.assertEquals(DNIValidationInfo.NOK_INVALID_CONTROL_DIGIT.getScore(), miDNI.getScore());
+        assertNotNull(miDNI);
+        assertEquals(DNIValidationInfo.NOK_INVALID_CONTROL_DIGIT, miDNI.getValidationInfo());
+        assertEquals(DNIValidationInfo.NOK_INVALID_CONTROL_DIGIT.getScore(), miDNI.getScore());
     }
 
 }
