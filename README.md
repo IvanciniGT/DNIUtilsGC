@@ -41,10 +41,10 @@ En función al patrón que se cumpla, se asocia al DNI un nivel de confianza. Po
 Toda la funcionalidad se maneja desde la clase `DNI`.
 
 ```java
-import es.atgti.datavinci.dni.DNIUtils;
+import es.atgti.datavinci.dni.DNI;
 
 // Crear una instancia de DNI
-DNI miDNI = DNIUtils.of("23000000T");
+DNI miDNI = DNI.of("23000000T");
 System.out.println("Original: " + miDNI.getSource());
 System.out.println("DNI: " + miDNI.getNumber());
 System.out.println("Letra: " + miDNI.getControlDigit());
