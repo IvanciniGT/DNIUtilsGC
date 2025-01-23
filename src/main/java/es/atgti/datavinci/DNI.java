@@ -7,4 +7,7 @@ import lombok.Value;
 public class DNI {
         String source;
         int number;
+        char controlDigit;
+        DNIStatus status;
+        double score;
 }
