@@ -65,7 +65,9 @@ DNIFormat dniFormat = DNIFormat.builder()
 Optional<String> otroDniFormateado = miDNI.format(dniFormat);
 ```
 
-### Posibles resultados de validación
+### Posibles resultados de validación 
+
+Se definen como constantes en la enumeración `DNIValidationInfo`:
 
 | Estado                      | Confianza | Válido | Descripción                                                                    |
 |-----------------------------|-----------|--------|--------------------------------------------------------------------------------|
