@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum DNIValidationInfo {
-
     OK                          (1,     true),
     OK_NO_DIGIT_CONTROL         (0.5,   true),
     OK_WEIRD_FORMAT             (0.4,   true),
