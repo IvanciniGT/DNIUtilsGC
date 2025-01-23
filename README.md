@@ -50,6 +50,7 @@ System.out.println("DNI: " + miDNI.getNumber());
 System.out.println("Letra: " + miDNI.getControlDigit());
 System.out.println("Estado: " + miDNI.getValidationInfo());
 System.out.println("Puntuación: " + miDNI.getScore());
+System.out.println("Válido: " + miDNI.getValidationInfo().isValid());
 
 // Formatear un DNI
 Optional<String> dniFormateado = miDNI.format();
