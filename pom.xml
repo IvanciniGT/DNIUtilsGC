@@ -20,7 +20,13 @@
         <!-- Versiones de librerias -->
         <junit-jupiter-engine.version>5.11.4</junit-jupiter-engine.version>
         <lombok.version>1.18.36</lombok.version>
+        <!-- Versiones y propiedades de plugins -->
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
+        <sonar.sources>pom.xml,src/main/java,src/main/resources</sonar.sources>
+        <org.jacoco.version>0.8.10</org.jacoco.version>
+        <sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
     </properties>
 
     <!-- Dependencias -->
@@ -64,6 +70,32 @@
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${org.jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>${sonar-maven-plugin.version}</version>
             </plugin>
         </plugins>
     </build>

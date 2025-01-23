@@ -1,78 +1,127 @@
 package es.atgti.datavinci;
 
-public interface DNIUtils {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
-    String DIGITOS_CONTROL = "TRWAGMYFPDXBNJZSQVHLCKE";
-    String NUMBER_PATTERN = "[\\D]";
-    String DNI_SIMPLE_NUMERIC_PATTERN = "[\\d]{1,8}";
-    String DNI_COMPLEX_NUMERIC_PATTERN = "([\\d]{1,2}([.][\\d]{3}){2})|([\\d]{1,3}[.][\\d]{3})";
-    String DNI_REGEX = "(("+DNI_SIMPLE_NUMERIC_PATTERN+")|"+DNI_COMPLEX_NUMERIC_PATTERN+")[ -]?[a-zA-Z]";
-    String DNI_REGEX_NO_CONTROL_DIGIT = "(("+DNI_SIMPLE_NUMERIC_PATTERN+")|"+DNI_COMPLEX_NUMERIC_PATTERN+")";
-    String DNI_LIGHT_REGEX = "([\\d]{1,8})\\D?[a-zA-Z]";
+import java.util.Optional;
 
-    static String format(DNI dni, DNIFormat formato){
-        // TODO: Pendiente de implementar
-        return null;
+import static es.atgti.datavinci.DNIPatterns.*;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+final class DNIUtils {
+
+    static Optional<String> format(DNI dni, @NonNull DNIFormat formato){
+        if(!dni.getValidationInfo().isValid())
+            return Optional.empty();
+
+        String dniNumber = ""+dni.getNumber().orElseThrow();
+        if (formato.isZerosPadding())
+            dniNumber = ("00000000" + dniNumber).substring(dniNumber.length());
+
+        String dniControlDigit = dni.getControlDigit().orElseThrow();
+        if (formato.isDots()) {
+            // Si tiene más de 3 dígitos, añadimos puntos
+            if (dniNumber.length() > 3) {
+                dniNumber = dniNumber.substring(0, dniNumber.length() - 3) + "." + dniNumber.substring(dniNumber.length() - 3);
+            }
+            // Si tiene más de 6 dígitos, añadimos puntos
+            if (dniNumber.length() > 7) {
+                dniNumber = dniNumber.substring(0, dniNumber.length() - 7) + "." + dniNumber.substring(dniNumber.length() - 7);
+            }
+        }
+
+        dniControlDigit = formato.isUpperCase() ? dniControlDigit.toUpperCase() : dniControlDigit.toLowerCase();
+        return Optional.of(dniNumber + formato.getSeparator().orElse("") + dniControlDigit);
+    }
+    
+    static Optional<String> format(DNI dni){
+        return format(dni, DNIFormat.DEFAULT);
     }
 
-    static DNI of(int numero, String letra) {
-        // TODO: Pendiente de implementar
-        return null;
+    static DNI of(int dniNumber, String dniControlDigit) {
+        if (dniControlDigit == null || dniControlDigit.isEmpty()) {     // Si no viene la letra de control, la intentaremos calcular
+            return of(dniNumber, (Character) null); 
+        } else if (dniControlDigit.length() == 1) {                     // Si viene la letra de control, validaremos el DNI
+            return of(dniNumber, dniControlDigit.charAt(0));
+        } else {                                                        // Si viene más de una letra de control, es un error
+            return new DNI(dniNumber+dniControlDigit, dniNumber, dniControlDigit, DNIValidationInfo.NOK_INVALID_CONTROL_DIGIT);
+        }
     }
-    static DNI of(int numero, char letra) {
-        return of(numero, ""+letra);
+    
+    static DNI of(int dniNumber, Character dniControlDigit) {
+        DNIValidationInfo validationInfo;
+        String calculatedControlDigit = dniControlDigit == null ? null : "" + dniControlDigit;
+        if (dniNumber < 0 || dniNumber > 99999999) {                        // Si el número del DNI no está en el rango
+            validationInfo = DNIValidationInfo.NOK_INVALID_DNI_NUMBER;
+        } else if (dniControlDigit == null) {                               // Si no viene la letra de control, la intentaremos calcular
+            validationInfo = DNIValidationInfo.OK_NO_DIGIT_CONTROL;
+            calculatedControlDigit = calculateControlDigitForDNINumber(dniNumber).toString();
+        } else{                                                             // Si viene la letra de control
+            calculatedControlDigit = ""+Character.toUpperCase(dniControlDigit);
+            if (! isControlDigitValid(dniNumber, Character.toUpperCase(dniControlDigit))) {            // Si viene la letra de control, validaremos el DNI
+                validationInfo = DNIValidationInfo.NOK_INVALID_CONTROL_DIGIT;
+            } else {                                                            // Si está correcto
+                validationInfo = DNIValidationInfo.OK;
+            }
+        }
+        String sourceDNI = dniNumber + (dniControlDigit == null ? "" : dniControlDigit.toString());
+        calculatedControlDigit = calculatedControlDigit == null ? "" : calculatedControlDigit;
+        return new DNI(sourceDNI, dniNumber, calculatedControlDigit, validationInfo);
     }
 
     static DNI of(String dni) {
-        DNI dniADevolver;
-        boolean cumplePatronRigido = dni.matches(DNI_REGEX);
-        boolean cumplePatronNoControlDigit = false;
-        boolean cumplePatronLight = cumplePatronRigido;
-        double score = 0;
-        String dniSinPuntos = dni.replace(".","");
-        if(!cumplePatronRigido){
-            cumplePatronNoControlDigit = dni.matches(DNI_REGEX_NO_CONTROL_DIGIT);
-            if(!cumplePatronNoControlDigit) {
-                // Voy a ver si el dni que viene cumple con el formato que debería tener un DNI
-                cumplePatronLight = dniSinPuntos.matches(DNI_LIGHT_REGEX);
+        DNIValidationInfo validationInfo;
+        Integer dniNumber = null;
+        String dniControlDigit = null;
+
+        if(dni == null ){                                                       // Si el DNI es nulo
+            validationInfo = DNIValidationInfo.NOK_NULL_DNI;
+        } else if(dni.isEmpty()){                                               // Si el DNI está vacío
+            validationInfo = DNIValidationInfo.NOK_EMPTY_DNI;
+        } else {                                                                // Si el DNI tiene contenido
+            DNIMatchedPattern matchedPattern = matchDNIPattern(dni);            // Intentamos identificar el patrón del DNI
+            if (matchedPattern == DNIMatchedPattern.NO_MATCH) {                 // Si no se identifica el patrón
+                validationInfo = DNIValidationInfo.NOK_INVALID_DNI_FORMAT;
+            } else {                                                            // Si se identifica el patrón
+                String dniNumberString = NO_DIGITS_PATTERN.matcher(dni).replaceAll("");
+                dniNumber = Integer.parseInt(dniNumberString);
+                // Pasaremos los datos a la función de validación.
+                // Si da OK, habrá que corregir la confianza dependiendo del patrón que se haya identificado
+                DNIValidationInfo correctedValidationInfo = getCorrectedValidationInfo(matchedPattern);
+                if (matchedPattern != DNIMatchedPattern.STRICT_PATTERN_NO_CONTROL_DIGIT)    // Si viene la letra de control la extraemos
+                    dniControlDigit = dni.substring(dni.length()-1);
+                DNI dniObject = of(dniNumber, dniControlDigit);                             // Validamos el DNI con los datos extraídos
+                dniControlDigit = dniObject.getControlDigit().orElse(null);           // Actualizamos la letra de control (mayúscula)
+                validationInfo = dniObject.getValidationInfo() == DNIValidationInfo.OK ? correctedValidationInfo : dniObject.getValidationInfo();
             }
         }
-        if(!cumplePatronLight && !cumplePatronNoControlDigit){ // Intentamos también con un patrón menos rígido, que no tiene tan en cuenta la posición de los puntos
-            dniADevolver= new DNI(dni, 0, ' ', DNIStatus.INVALID_DNI_FORMAT, score);
+        return new DNI(dni, dniNumber, dniControlDigit, validationInfo);
+    }
+
+    private static DNIValidationInfo getCorrectedValidationInfo(DNIMatchedPattern matchedPattern){
+        return matchedPattern == DNIMatchedPattern.LIGHT_PATTERN?
+                DNIValidationInfo.OK_WEIRD_FORMAT:
+                DNIValidationInfo.OK;
+    }
+
+    private static DNIMatchedPattern matchDNIPattern(String dni) {
+        if (DNI_STRICT_PATTERN_PRESENT_CONTROL_DIGIT.matcher(dni).matches()) {
+            return DNIMatchedPattern.STRICT_PATTERN;
+        } else if (DNI_STRICT_PATTERN_NO_CONTROL_DIGIT.matcher(dni).matches()) {
+            return DNIMatchedPattern.STRICT_PATTERN_NO_CONTROL_DIGIT;
+        } else if (DNI_LIGHT_REGEX.matcher(dni.replace(".","")).matches()) {
+            return DNIMatchedPattern.LIGHT_PATTERN;
         } else {
-            // Extraer desde el principio lo que sean números (con regex)
-            String numeros= dni.replaceAll(NUMBER_PATTERN, "");
-            int numero = Integer.parseInt(numeros);
-            // El numero puede tener entre 1 y 8... la letra es lo ultimo
-            char letra = cumplePatronNoControlDigit?getDigitoControl(numero) : dni.charAt(dni.length()-1);
-            DNIStatus status = calculateDNIStatus(cumplePatronNoControlDigit, numero, letra);
-            score = calculateDNIScore(status, cumplePatronRigido);
-            dniADevolver = new DNI(dni, numero, letra, status, score);
+            return DNIMatchedPattern.NO_MATCH;
         }
-        return dniADevolver;
     }
 
-    private static double calculateDNIScore(DNIStatus status, boolean cumplePatronRigido) {
-        return switch (status) {
-            case OK -> cumplePatronRigido ? 1 : 0.5;
-            case INVALID_CONTROL_DIGIT -> 0;
-            case OK_NO_DIGIT_CONTROL -> 0.3;
-            default -> 0.5;
-        };
+    private static boolean isControlDigitValid(int dniNumber, char dniControlDigit){
+        return calculateControlDigitForDNINumber(dniNumber) == dniControlDigit;
     }
 
-    private static DNIStatus calculateDNIStatus(boolean cumplePatronNoControlDigit, int numero, char letra) {
-        DNIStatus status = DNIStatus.OK_NO_DIGIT_CONTROL;
-        if(!cumplePatronNoControlDigit)
-            status = esDigitoControlValido(numero, letra) ? DNIStatus.OK : DNIStatus.INVALID_CONTROL_DIGIT;
-        return status;
-    }
-
-    private static boolean esDigitoControlValido(int numero, char letra){
-        return getDigitoControl(numero) == letra;
-    }
-
-    private static char getDigitoControl(int numero){
-        return DIGITOS_CONTROL.charAt(numero % 23);
+    private static Character calculateControlDigitForDNINumber(int dniNumber){
+        return ORDERED_DNI_CONTROL_DIGITS.charAt(dniNumber % 23);
     }
 }
