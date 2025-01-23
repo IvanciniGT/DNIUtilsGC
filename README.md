@@ -65,6 +65,20 @@ DNIFormat dniFormat = DNIFormat.builder()
 Optional<String> otroDniFormateado = miDNI.format(dniFormat);
 ```
 
+### Posibles resultados de validación
+
+| Estado                      | Confianza | Válido | Descripción                                                                    |
+|-----------------------------|-----------|--------|--------------------------------------------------------------------------------|
+| OK                          | 1         | true   | DNI válido                                                                     |
+| OK_NO_DIGIT_CONTROL         | 0.5       | true   | DNI válido pero sin dígito de control                                           |
+| OK_WEIRD_FORMAT             | 0.4       | true   | DNI válido con formato extraño <BR>(valida la letra pero sigue un patrón raro) | 
+| NOK_INVALID_DNI_FORMAT      | 0         | false  | DNI con formato inválido                                                       |
+| NOK_INVALID_CONTROL_DIGIT   | 0.1       | false  | DNI con dígito de control inválido                                             |                           
+| NOK_NULL_DNI                | 0         | false  | DNI nulo                                                                       |
+| NOK_EMPTY_DNI               | 0         | false  | DNI vacío                                                                      |
+| NOK_INVALID_DNI_NUMBER      | 0         | false  | DNI con número inválido (menor a 0 o mayor a 99999999)                         |
+    
+
 ## Desarrollo
 
 ### Estructura del Proyecto
