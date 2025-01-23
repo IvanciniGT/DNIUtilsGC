@@ -7,7 +7,7 @@
     <!-- Coordenadas (datos identificativos) del proyecto -->
     <groupId>es.atgti.datavinci</groupId>
     <artifactId>dni</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <!-- Metadatos del proyecto -->
     <name>Librería para trabajar con DNIs</name>

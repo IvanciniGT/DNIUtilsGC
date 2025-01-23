@@ -32,7 +32,7 @@ En función al patrón que se cumpla, se asocia al DNI un nivel de confianza. Po
 <dependency>
     <groupId>es.atgti.datavinci</groupId>
     <artifactId>dni</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
