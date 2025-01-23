@@ -59,9 +59,9 @@ final class DNIUtils {
             calculatedControlDigit = calculateControlDigitForDNINumber(dniNumber).toString();
         } else{                                                             // Si viene la letra de control
             calculatedControlDigit = ""+Character.toUpperCase(dniControlDigit);
-            if (! isControlDigitValid(dniNumber, Character.toUpperCase(dniControlDigit))) {            // Si viene la letra de control, validaremos el DNI
+            if (! isControlDigitValid(dniNumber, Character.toUpperCase(dniControlDigit))) {            // Sí viene la letra de control, validaremos el DNI
                 validationInfo = DNIValidationInfo.NOK_INVALID_CONTROL_DIGIT;
-            } else {                                                            // Si está correcto
+            } else {                                                            // Sí está correcto
                 validationInfo = DNIValidationInfo.OK;
             }
         }
@@ -83,7 +83,7 @@ final class DNIUtils {
             DNIMatchedPattern matchedPattern = matchDNIPattern(dni);            // Intentamos identificar el patrón del DNI
             if (matchedPattern == DNIMatchedPattern.NO_MATCH) {                 // Si no se identifica el patrón
                 validationInfo = DNIValidationInfo.NOK_INVALID_DNI_FORMAT;
-            } else {                                                            // Si se identifica el patrón
+            } else {                                                            // Sí se identifica el patrón
                 String dniNumberString = NO_DIGITS_PATTERN.matcher(dni).replaceAll("");
                 dniNumber = Integer.parseInt(dniNumberString);
                 // Pasaremos los datos a la función de validación.

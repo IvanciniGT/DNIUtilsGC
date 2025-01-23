@@ -6,7 +6,7 @@ import lombok.Value;
 import java.util.Optional;
 
 @Value
-// Nos da los getters, private final y me da un constructor con todos los argumentos
+// Nos da los getters, añade `private final`a las propiedades y un constructor con todos los argumentos
 public class DNI  {
 
         String source;                              // El texto original del DNI.

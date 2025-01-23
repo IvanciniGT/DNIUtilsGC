@@ -65,7 +65,7 @@ class DNICreationFromStringTest {
 
     }
 
-    // Quiero otra para DNIS que no corresponda la letra con el número
+    // Quiero otra para DNI que no corresponda la letra con el número
     @ParameterizedTest
     @DisplayName("No debería poder crear un objeto DNI válido desde un texto con letra incorrecta")
     @CsvSource({
@@ -84,7 +84,7 @@ class DNICreationFromStringTest {
         Assertions.assertEquals(DNIValidationInfo.NOK_INVALID_CONTROL_DIGIT, miDNI.getValidationInfo());
         Assertions.assertEquals(DNIValidationInfo.NOK_INVALID_CONTROL_DIGIT.getScore(), miDNI.getScore());
     }
-    // Quiero otra para DNIS que no corresponda la letra con el número
+    // Quiero otra para DNI que no corresponda la letra con el número
     @ParameterizedTest
     @DisplayName("No debería poder crear un objeto DNI válido desde un texto con letra incorrecta")
     @CsvSource({
@@ -99,7 +99,7 @@ class DNICreationFromStringTest {
         Assertions.assertEquals(DNIValidationInfo.NOK_INVALID_DNI_FORMAT.getScore(), miDNI.getScore());
     }
 
-    // Quiero otra para DNIS que no corresponda la letra con el número
+    // Quiero otra para DNI que no corresponda la letra con el número
     @ParameterizedTest
     @DisplayName("Debería poder crear un objeto DNI válido con poca confianza si solo viene el número")
     @CsvSource({

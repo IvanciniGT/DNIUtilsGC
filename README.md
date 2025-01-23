@@ -2,7 +2,7 @@
 
 Este proyecto es una librería Java para validar y formatear números de DNI (Documento Nacional de Identidad) españoles.
 
-Esta librería permite trabajar con DNIs con diferentes formatos.
+Esta librería permite trabajar con DNI con diferentes formatos.
 Se admiten cosas como:
 
     23000000
@@ -79,7 +79,7 @@ Se definen como constantes en la enumeración `DNIValidationInfo`:
 | Estado                      | Confianza | Válido | Descripción                                                                    |
 |-----------------------------|-----------|--------|--------------------------------------------------------------------------------|
 | OK                          | 1         | true   | DNI válido                                                                     |
-| OK_NO_DIGIT_CONTROL         | 0.5       | true   | DNI válido pero sin dígito de control                                           |
+| OK_NO_DIGIT_CONTROL         | 0.5       | true   | DNI válido pero sin dígito de control                                          |
 | OK_WEIRD_FORMAT             | 0.4       | true   | DNI válido con formato extraño <BR>(valida la letra pero sigue un patrón raro) | 
 | NOK_INVALID_DNI_FORMAT      | 0         | false  | DNI con formato inválido                                                       |
 | NOK_INVALID_CONTROL_DIGIT   | 0.1       | false  | DNI con dígito de control inválido                                             |                           
@@ -93,9 +93,9 @@ Se definen como constantes en la enumeración `DNIValidationInfo`:
 ### Estructura del Proyecto
 
 El proyecto tiene la siguiente estructura de directorios y archivos:
-- `src/main/java/es/atgti/datavinci/DNI.java`: Clase que representa un número de DNI y su información de validación. También permite crear instancias de DNIs.
+- `src/main/java/es/atgti/datavinci/DNI.java`: Clase que representa un número de DNI y su información de validación. También permite crear instancias de DNI.
 - `src/main/java/es/atgti/datavinci/DNIValidationInfo.java`: Enumeración que define los posibles estados de validación de un DNI.
-- `src/main/java/es/atgti/datavinci/DNIUtils.java`: Clase de utilidad para validar números de DNI y dígitos de control y para formatear DNIs.
+- `src/main/java/es/atgti/datavinci/DNIUtils.java`: Clase de utilidad para validar números de DNI y dígitos de control y para formatear DNI.
 - `src/main/java/es/atgti/datavinci/DNIFormat.java`: Clase con patrón builder para definir el formato de un DNI.
 
 ### Autor

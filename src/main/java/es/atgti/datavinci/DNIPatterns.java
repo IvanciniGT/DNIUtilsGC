@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 final class DNIPatterns {
 
     // Patron de DNI con letra de control
-        // 8 dígitos sin puntos + espacio o guión + letra de control: 12345678
+        // 8 dígitos sin puntos + espacio o guion + letra de control: 12345678
     public static final String DNI_NO_DOTS_NUMERIC_PATTERN = "\\d{1,8}";
         // 1 a 2 dígitos + 3 dígitos + punto + 3 dígitos + punto + letra de control: 12.345.678
     public static final String DNI_MILLIONS_DOTTED_NUMERIC_PATTERN = "\\d{1,2}([.]\\d{3}){2}";
@@ -17,7 +17,7 @@ final class DNIPatterns {
     public static final String DNI_THOUSANDS_DOTTED_NUMERIC_PATTERN = "\\d{1,3}[.]\\d{3}";
 
     // Patrón de DNI con letra de control. Admite espacios y guiones entre los dígitos
-    // 8 dígitos sin puntos + espacio o guión o nada + letra de control
+    // 8 dígitos sin puntos + espacio o guion o nada + letra de control
     // Ejemplos:
     // - 12345678Z
     // - 12.345.678-Z
@@ -40,7 +40,7 @@ final class DNIPatterns {
                     DNI_THOUSANDS_DOTTED_NUMERIC_PATTERN+")");
 
     // Patrón de DNI sin letra de control. Admite espacios y guiones entre los dígitos
-    // 8 dígitos sin puntos + espacio o guión o nada + letra de control
+    // 8 dígitos sin puntos + espacio o guion o nada + letra de control
     // Ejemplos:
     // - 12345678Z
     // - 12345678-Z

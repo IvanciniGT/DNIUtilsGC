@@ -10,11 +10,11 @@ import java.util.Optional;
 public class DNIFormat {
 
     @Builder.Default
-    boolean dots = false;               // Si se deben incluir puntos en el número del DNI
+    boolean dots = false;               // Sí se deben incluir puntos en el número del DNI
     @Builder.Default
-    boolean upperCase = true;           // Si la letra de control debe ir en mayúsculas
+    boolean upperCase = true;           // Sí la letra de control debe ir en mayúsculas
     @Builder.Default
-    boolean zerosPadding = false;       // Si se deben rellenar con ceros los números del DNI de menos de 8 dígitos
+    boolean zerosPadding = false;       // Sí se deben rellenar con ceros los números del DNI de menos de 8 dígitos
     @Builder.Default
     String separator = null;            // Separador personalizado
 
