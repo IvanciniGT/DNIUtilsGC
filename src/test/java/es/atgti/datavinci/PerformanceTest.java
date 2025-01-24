@@ -12,12 +12,11 @@ class PerformanceTest {
 
     @BeforeAll
     static void warmUpTheJIT() {
-        System.out.println("Warming up the JIT");
+        System.out.println("Warming up the JIT (hotspot)...");
         for (int i = 0; i < WARMUP_ITERATIONS; i++) {
             validateDNI(generateRandomDNI());
         }
     }
-
 
     @Test
     void testPerformance() {

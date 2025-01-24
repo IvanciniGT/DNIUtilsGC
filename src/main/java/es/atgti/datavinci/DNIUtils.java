@@ -40,10 +40,10 @@ final class DNIUtils {
     }
 
     static DNI of(int dniNumber, String dniControlDigit) {
-        dniControlDigit = dniControlDigit != null ? dniControlDigit.trim() : null;      // Limpiamos la letra de control de espacios
         if (dniControlDigit == null || dniControlDigit.isEmpty()) {     // Si no viene la letra de control, la intentaremos calcular
             return of(dniNumber, (Character) null); 
-        } else if (dniControlDigit.length() == 1) {                     // Si viene la letra de control, validaremos el DNI
+        } else if (dniControlDigit.trim().length() == 1) {                     // Si viene la letra de control, validaremos el DNI
+            dniControlDigit = dniControlDigit.trim();                   // Limpiamos la letra de control de espacios
             return of(dniNumber, dniControlDigit.charAt(0));
         } else {                                                        // Si viene más de una letra de control, es un error
             return new DNI(dniNumber+dniControlDigit, dniNumber, dniControlDigit, DNIValidationInfo.NOK_INVALID_CONTROL_DIGIT);
@@ -60,10 +60,10 @@ final class DNIUtils {
             calculatedControlDigit = calculateControlDigitForDNINumber(dniNumber).toString();
         } else{                                                             // Si viene la letra de control
             calculatedControlDigit = ""+Character.toUpperCase(dniControlDigit);
-            if (! isControlDigitValid(dniNumber, Character.toUpperCase(dniControlDigit))) {            // Sí viene la letra de control, validaremos el DNI
-                validationInfo = DNIValidationInfo.NOK_INVALID_CONTROL_DIGIT;
-            } else {                                                            // Sí está correcto
+            if (isControlDigitValid(dniNumber, Character.toUpperCase(dniControlDigit))) {  // Sí está correcto
                 validationInfo = DNIValidationInfo.OK;
+            } else {                                                            // Sí viene la letra de control, validaremos el DNI
+                validationInfo = DNIValidationInfo.NOK_INVALID_CONTROL_DIGIT;
             }
         }
         String sourceDNI = dniNumber + (dniControlDigit == null ? "" : dniControlDigit.toString());
