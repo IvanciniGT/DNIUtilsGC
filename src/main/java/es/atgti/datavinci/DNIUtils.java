@@ -40,6 +40,7 @@ final class DNIUtils {
     }
 
     static DNI of(int dniNumber, String dniControlDigit) {
+        dniControlDigit = dniControlDigit != null ? dniControlDigit.trim() : null;      // Limpiamos la letra de control de espacios
         if (dniControlDigit == null || dniControlDigit.isEmpty()) {     // Si no viene la letra de control, la intentaremos calcular
             return of(dniNumber, (Character) null); 
         } else if (dniControlDigit.length() == 1) {                     // Si viene la letra de control, validaremos el DNI
@@ -71,6 +72,7 @@ final class DNIUtils {
     }
 
     static DNI of(String dni) {
+        dni = dni != null ? dni.trim() : null;                                  // Limpiamos el DNI de espacios
         DNIValidationInfo validationInfo;
         Integer dniNumber = null;
         String dniControlDigit = null;

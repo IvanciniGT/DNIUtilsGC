@@ -5,17 +5,24 @@ Este proyecto es una librería Java para validar y formatear números de DNI (Do
 Esta librería permite trabajar con DNI con diferentes formatos.
 Se admiten cosas como:
 
-    23000000
     23000000T
-    23.000.000
     23.000.000T
     23.000.000t
     23.000.000 T
     23.000.000-T
-    23000000T
     23.000T
     23.000 T
     23T
+
+Con baja confianza se admiten cosas como:
+
+    23000000
+    23.000.000
+    230.00.000T
+    23.000.000_t
+    23.000.000/T
+    23.000.000-T
+    ....23.000T
 
 En función al patrón que se cumpla, se asocia al DNI un nivel de confianza. Por ejemplo:  
 - Para un DNI que no traiga letra, se asume que es un DNI válido, pero con un nivel de confianza bajo.
